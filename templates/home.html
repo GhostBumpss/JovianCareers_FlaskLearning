@@ -21,7 +21,7 @@
       <p class="lead">
         Hello there. I am building this Jovian Careers website in order to learn Flask and its functionalities.
       </p>
-      <h2 class="text-center mt-2 mb-4">Open Positions</h2>
+      <h2 class="text-center mt-2 mb-4">Job Openings at {{ company_name }}</h2>
       {% for job in jobs %}
         {% include 'joblists.html' %}
       {% endfor %}
