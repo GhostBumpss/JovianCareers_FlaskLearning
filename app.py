@@ -39,3 +39,4 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
 
 # print('name')
+# Buy a domain name from domain.google.com to create your own domain. Tutorial starts at 1:38 in the video.
