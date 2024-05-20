@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session
-from functions.function import load_jobs_from_db
+from functions.function import load_jobs_from_db, load_job_from_db
 app = Flask(__name__)
 
 
@@ -12,6 +12,11 @@ def hello_world():
 def list_jobs():
     joblist= load_jobs_from_db()
     return jsonify(joblist)
+
+@app.route('/job/<id>')
+def show_job(id):
+    joblist = load_job_from_db(id)
+    return render_template('jobpage.html', job=joblist[0])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
