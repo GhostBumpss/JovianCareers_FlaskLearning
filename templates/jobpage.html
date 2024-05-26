@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ job['title'] }} - Jovian Careers </title>
+    {% include 'bootstrap.html' %}
 </head>
 <body>
-    <h3>{{job['title']}}</h3>
-    <br>
-    <h3>Location</h3>
-    <p>{{job['location']}}</p>
-    <br>
-    <h3>Salary</h3>
-    <p>{{job['salary']}}</p>
-    <br>
-    <h3>Apply By</h3>
-    <p>{{job['effective_till'].strftime('%A, %d %b %Y')}}
-    <br>
-    <h3>Key Responsibilities</h3>
-    <p>
-        <ul>
-            {% for responsibilities in job['responsibilities'].split(', ') %}
-                <li>{{responsibilities}}</li>
-            {% endfor %}
-        </ul>
-    </p>
-    <br>
-    <h3>Posted On</h3>
-    <p>{{job['created_at'].strftime('%d %b %Y')}}</p>
+    {% include 'nav.html' %}
+    <div class="container">
+        <div>
+            {% include 'banner.html' %}
+        </div>
+        <h3>{{job['title']}}</h3>
+        <br>
+        <h3>Location</h3>
+        <p>{{job['location']}}</p>
+        <br>
+        <h3>Salary</h3>
+        <p>{{job['salary']}}</p>
+        <br>
+        <h3>Apply By</h3>
+        <p>{{job['effective_till'].strftime('%A, %d %b %Y')}}
+        <br>
+        <h3>Key Responsibilities</h3>
+        <p>
+            <ul>
+                {% for responsibilities in job['responsibilities'].split(', ') %}
+                    <li>{{responsibilities}}</li>
+                {% endfor %}
+            </ul>
+        </p>
+        <br>
+        <h3>Posted On</h3>
+        <p>{{job['created_at'].strftime('%d %b %Y')}}</p>
+    </div>
+
+    {% include 'applicationform.html' %}
 </body>
 </html>

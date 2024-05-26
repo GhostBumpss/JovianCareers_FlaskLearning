@@ -18,3 +18,36 @@ def load_job_from_db(id):
     column_names = [desc[0] for desc in cursor.description]
     job = [dict(zip(column_names, row)) for row in results]
     return job
+
+
+def app_submitted(job_id, data):
+  full_name = data['full_name']
+  email = data['email']
+  linkedin_url = data['linkedin_url']
+  education = data['Education']
+  work_experience = data['Exp']
+  resume = data['Resume']
+  jobid = job_id
+
+  sql = """
+  INSERT INTO applications 
+  (jobid, full_name, email, linkedin_url, education, work_experience, resume_url) 
+  VALUES (%s, %s, %s, %s, %s, %s, %s)
+  """
+
+  with connection.cursor() as cursor:
+      cursor.execute(sql, (jobid, full_name, email, linkedin_url, education, work_experience, resume))
+  connection.commit()
+
+def last_submiited_job():
+  with connection.cursor() as cursor:
+    sql = """
+    Select * From applications
+    Order by id desc
+    Limit 1
+    """
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    column_names = [desc[0] for desc in cursor.description]
+    last_submision = [dict(zip(column_names, row)) for row in results]
+    return last_submision
