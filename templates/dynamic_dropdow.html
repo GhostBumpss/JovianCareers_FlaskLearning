@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Application Submitted</title>
+  {% include 'bootstrap.html' %}
+</head>
+<body>
+  {% include 'nav.html' %}
+
+  <label for='jobs'>Select a Job</label>
+  <select id='jobs' name='jobs'>
+    {% for job in jobposts %}
+      <option value="{{ job['id'] }}">{{ job['title'] }}</option>
+    {% endfor %}
+  </select>
+  <br>
+    <label for='application'>Select an Application</label>
+    <select id='application' name='application'></select>
+  <br>
+    <label for='appstatus'>Select the status</label>
+    <select id='appstatus' name='application'></select>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const jobIdDropdown = document.getElementById('jobs');
+      const applicationIdDropdown = document.getElementById('application');
+      const applicationstatusdropdown = document.getElementById('appstatus');
+
+      jobIdDropdown.addEventListener('change', function() {
+        const selectedJobId = this.value;
+        console.log('Jobid: ', selectedJobId);
+
+        // Send an AJAX request to your Python backend
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/get_applications/${selectedJobId}`);
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const applications = JSON.parse(xhr.response); 
+
+            // Clear existing options in the second dropdown
+            applicationIdDropdown.innerHTML = '';
+            applicationstatusdropdown.innerHTML = ''; // Clear the third dropdown as well
+            console.log(applications);
+
+            // Add new options based on fetched data
+            applications.forEach(application => {
+              const option = document.createElement('option');
+              option.value = application.id;
+              option.text = application.Application; 
+              applicationIdDropdown.add(option);
+            });
+          } else {
+            console.error('Error fetching applications:', xhr.status, xhr.statusText);
+          }
+        };
+        xhr.send();
+      });
+
+    applicationIdDropdown.addEventListener('change', function() {
+        const selectedApplicationId = this.value;
+        console.log('ApplicationId: ', selectedApplicationId);
+
+        // Send an AJAX request to your Python backend for details
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/applicationStatus/${selectedApplicationId}`);
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const getappStatus = JSON.parse(xhr.response);
+            console.log(getappStatus);
+              
+            applicationstatusdropdown.innerHTML = '';
+
+            getappStatus.forEach(detail => {
+              const option = document.createElement('option');
+              option.value = detail.statusid;
+              option.text = detail.status;
+              applicationstatusdropdown.add(option);
+            });
+          } else {
+            console.error('Error fetching details:', xhr.status, xhr.statusText);
+          }
+        };
+        xhr.send();
+      });
+    });
+  </script>
+</body>
+</html>

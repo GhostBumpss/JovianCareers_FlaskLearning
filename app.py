@@ -1,5 +1,6 @@
+from types import MethodType
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session
-from functions.function import last_submiited_job, load_jobs_from_db, load_job_from_db, app_submitted
+from functions.function import last_submiited_job, load_jobs_from_db, load_job_from_db, app_submitted, dropdown1, get_application_by_jobid, get_application_status
 app = Flask(__name__)
 
 
@@ -30,17 +31,22 @@ def apply_to_job(id):
     joblist = load_job_from_db(id)
     app_submitted(job_id=id, data=data_dict)
     new_application = last_submiited_job()
-    print(new_application)
-    # print(joblist[0])
-    # return jsonify(data)
     return render_template('Application_submitted.html', application=new_application[0], job=joblist[0])
 
+@app.route('/dynamic_dropdown', methods=['GET'])
+def dynamic_dropdown1():
+    jobposts = dropdown1()
+    return render_template('dynamic_dropdow.html', jobposts=jobposts)
 
-# @app.route('/job/<id>/apply', methods=['get'])
-# def apply_to_job(id):
-#     data = request.args
-#     return jsonify(data)
+@app.route('/get_applications/<job_id>', methods=['GET'])
+def get_applications(job_id):
+    applications = get_application_by_jobid(job_id)
+    return jsonify(applications)
 
+@app.route('/applicationStatus/<appid>', methods=['GET'])
+def applicationStatus(appid):
+    application_status = get_application_status(appid)
+    return jsonify(application_status)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

@@ -51,3 +51,41 @@ def last_submiited_job():
     column_names = [desc[0] for desc in cursor.description]
     last_submision = [dict(zip(column_names, row)) for row in results]
     return last_submision
+
+def dropdown1():
+  with connection.cursor() as cursor:
+    sql = """
+    Select id, title From JobPosting
+    """
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    column_names = [desc[0] for desc in cursor.description]
+    val = [dict(zip(column_names, row)) for row in results]
+    return val
+
+def get_application_by_jobid(jobid):
+  with connection.cursor() as cursor:
+    sql = """
+    Select CONCAT(ap.id, ' || ', ap.full_name) Application, ap.id, jp.title
+    From JovianProject.JobPosting jp
+    Inner Join JovianProject.applications ap on jp.id=ap.jobid
+    Where jobid=%s
+    """
+    cursor.execute(sql, (jobid))
+    results = cursor.fetchall()
+    column_names = [desc[0] for desc in cursor.description]
+    val = [dict(zip(column_names, row)) for row in results]
+    return val
+
+def get_application_status(applid):
+  with connection.cursor() as cursor:
+    sql = """
+    Select statusid, `status`
+    from JovianProject.applicationstatus
+    where applicationid=%s
+    """
+    cursor.execute(sql, (applid))
+    results = cursor.fetchall()
+    column_names = [desc[0] for desc in cursor.description]
+    val = [dict(zip(column_names, row)) for row in results]
+    return val
