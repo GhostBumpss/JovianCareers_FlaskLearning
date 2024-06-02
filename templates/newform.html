@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Creation</title>
+</head>
+<body>
+  <div>
+    <form id='create_login' action="/loginsubmit" method='post'>
+      <div>
+        <label for='username'>Provide a Username</label>
+        <input type='text' id='username' name='user_name' required>
+      </div><br>
+      <div>
+        <label for='password'>Create a password</label>
+        <input type='text' id='password' name='password' required>
+      </div><br>
+      <div>
+        <label for='email'>Email</label>
+        <input type='text' id='email' name='email' required>
+      </div><br>
+      <div>
+        <label for='mobile'>Phone no.</label>
+        <input type='text' id='mobile' name='phoneno' required>
+      </div><br>
+      <button type='submit'>Create</button>
+    </form>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('create_login');
+
+      loginForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Preventing default form submission
+
+        const loginFormdata = new FormData(loginForm); // Get the form data
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/loginsubmit');
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log('Login created successfully', xhr.responseText);
+          } else {
+            coonsole.log('Error creating login', xhr.status, xhr.statusText);
+          };
+        };
+
+        const formData = {};
+        loginFormdata.forEach((value, key) => {
+          formData[key] = value;
+        });
+
+        console.log(formData);
+
+        xhr.send(JSON.stringify(formData));
+      });
+    });
+  </script>
+</body>
+</html>

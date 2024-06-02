@@ -1,32 +1,30 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const jobIdDropdown = document.getElementById('jobs');
-  const applicationIdDropdown = document.getElementById('application');
-
-  jobIdDropdown.addEventListener('change', function() {
-    const selectedJobId = this.value;
-
-    // Send an AJAX request to your Python backend
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `/get_applications/${selectedJobId}`);
-    xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        const applications = JSON.parse(xhr.response); 
-
-        // Clear existing options in the second dropdown
-        applicationIdDropdown.innerHTML = '';
-
-        // Add new options based on fetched data
-        applications.forEach(application => {
-          const option = document.createElement('option');
-          option.value = application.id;
-          option.text = application.Application; 
-          applicationIdDropdown.add(option);
-        });
-      } else {
-        console.error('Error fetching applications:', xhr.status, xhr.statusText);
-      }
-    };
-    xhr.send();
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('create_login');
+  
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Preventing default form submission
+  
+      const loginFormdata = new FormData(loginForm); // Get the form data
+  
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/loginsubmit');
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  
+      xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Login created successfully', xhr.responseText);
+        } else {
+          coonsole.log('Error creating login', xhr.status, xhr.statusText);
+        };
+      };
+  
+      const formData = {};
+      loginFormdata.forEach((value, key) => {
+        formData[key] = value;
+      });
+  
+      console.log(formData);
+  
+      xhr.send(JSON.stringify(formData));
+    });
   });
-});
-

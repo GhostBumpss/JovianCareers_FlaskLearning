@@ -39,6 +39,21 @@ def app_submitted(job_id, data):
       cursor.execute(sql, (jobid, full_name, email, linkedin_url, education, work_experience, resume))
   connection.commit()
 
+def login_Created(data):
+  username = data['user_name']
+  password = data['password']
+  email = data['email']
+  phone = data['phoneno']
+  
+  sql = """
+  Insert Into JovianProject.logincreation (username, `password`, emailid, mobile)
+  values (%s, %s, %s, %s)
+  """
+  
+  with connection.cursor() as cursor:
+      cursor.execute(sql, (username, password, email, phone))
+  connection.commit()
+
 def last_submiited_job():
   with connection.cursor() as cursor:
     sql = """
